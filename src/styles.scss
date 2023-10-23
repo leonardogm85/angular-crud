@@ -20,5 +20,42 @@ $my-theme: mat.define-light-theme((
 
 @include mat.all-component-themes($my-theme);
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.p-4 {
+  padding: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.mb-4 {
+  margin-top: 1.5rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
+
+.ms-2 {
+  margin-left: 0.5rem;
+}
+
+.spinner {
+  background: rgba($color: #000000, $alpha: 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

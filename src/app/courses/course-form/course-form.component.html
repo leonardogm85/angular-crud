@@ -1,1 +1,26 @@
-<p>course-form works!</p>
+<mat-card class="p-4">
+
+  <mat-toolbar color="primary">
+    Save Course
+  </mat-toolbar>
+
+  <form [formGroup]="form" class="mt-4">
+
+    <mat-form-field class="w-100">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput placeholder="Name">
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Category</mat-label>
+      <input formControlName="category" matInput placeholder="Category">
+    </mat-form-field>
+
+  </form>
+
+  <mat-card-actions align="end">
+    <button (click)="onSubmit()" mat-raised-button color="primary" class="me-2">Save</button>
+    <button (click)="onCancel()" mat-raised-button>Cancel</button>
+  </mat-card-actions>
+
+</mat-card>
