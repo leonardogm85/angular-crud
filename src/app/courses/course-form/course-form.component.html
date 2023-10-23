@@ -13,7 +13,11 @@
 
     <mat-form-field class="w-100">
       <mat-label>Category</mat-label>
-      <input formControlName="category" matInput placeholder="Category">
+      <mat-select formControlName="category">
+        <mat-option>None</mat-option>
+        <mat-option value="front-end">Front-End</mat-option>
+        <mat-option value="back-end">Back-End</mat-option>
+      </mat-select>
     </mat-form-field>
 
   </form>

@@ -21,4 +21,10 @@ export class CoursesService {
       tap(console.log)
     );
   }
+
+  save(record: Course): Observable<Course> {
+    return this._httpClient.post<Course>(this._api, record).pipe(
+      first()
+    );
+  }
 }
