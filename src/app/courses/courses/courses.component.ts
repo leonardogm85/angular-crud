@@ -16,12 +16,6 @@ export class CoursesComponent {
 
   courses$: Observable<Course[]>;
 
-  displayedColumns: string[] = [
-    'name',
-    'category',
-    'actions'
-  ];
-
   constructor(
     private _coursesService: CoursesService,
     private _dialog: MatDialog,
