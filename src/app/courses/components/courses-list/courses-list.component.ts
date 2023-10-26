@@ -12,6 +12,7 @@ export class CoursesListComponent {
   @Input() courses: Course[] = [];
 
   @Output() add: EventEmitter<void> = new EventEmitter<void>();
+  @Output() edit: EventEmitter<Course> = new EventEmitter<Course>();
 
   readonly displayedColumns: string[] = [
     'name',
@@ -21,6 +22,10 @@ export class CoursesListComponent {
 
   onAdd(): void {
     this.add.emit();
+  }
+
+  onEdit(course: Course): void {
+    this.edit.emit(course);
   }
 
 }
