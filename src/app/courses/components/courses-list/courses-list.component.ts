@@ -13,6 +13,7 @@ export class CoursesListComponent {
 
   @Output() add: EventEmitter<void> = new EventEmitter<void>();
   @Output() edit: EventEmitter<Course> = new EventEmitter<Course>();
+  @Output() delete: EventEmitter<Course> = new EventEmitter<Course>();
 
   readonly displayedColumns: string[] = [
     'name',
@@ -26,6 +27,10 @@ export class CoursesListComponent {
 
   onEdit(course: Course): void {
     this.edit.emit(course);
+  }
+
+  onDelete(course: Course): void {
+    this.delete.emit(course);
   }
 
 }
