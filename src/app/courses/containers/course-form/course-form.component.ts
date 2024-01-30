@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder } from '@angular/forms';
+import { AbstractControl, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -16,8 +16,14 @@ export class CourseFormComponent implements OnInit {
 
   form = this._formBuilder.group({
     _id: [''],
-    name: [''],
-    category: ['']
+    name: ['', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(100)
+    ]],
+    category: ['', [
+      Validators.required
+    ]]
   });
 
   constructor(
@@ -53,13 +59,29 @@ export class CourseFormComponent implements OnInit {
     this._location.back();
   }
 
-  onSuccess(): void {
+  private onSuccess(): void {
     this._snackBar.open('Course saved successfully!', 'Close', { duration: 5000 });
     this.onCancel();
   }
 
-  onError(): void {
+  private onError(): void {
     this._snackBar.open('Error while saving course.', 'Close', { duration: 5000 });
+  }
+
+  getErrorMessage<TType>(control: AbstractControl<TType>): string {
+    if (control.hasError('required')) {
+      return 'The value must be provided.';
+    }
+
+    if (control.hasError('minlength')) {
+      return `The value must be a minimum of ${control.getError('minlength')['requiredLength']} characters.`;
+    }
+
+    if (control.hasError('maxlength')) {
+      return `The value must be a maximum of ${control.getError('maxlength')['requiredLength']} characters.`;
+    }
+
+    return 'The value is invalid.';
   }
 
 }
