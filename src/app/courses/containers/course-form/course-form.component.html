@@ -21,8 +21,8 @@
       <mat-label>Category</mat-label>
       <mat-select formControlName="category">
         <mat-option>None</mat-option>
-        <mat-option value="front-end">Front-End</mat-option>
-        <mat-option value="back-end">Back-End</mat-option>
+        <mat-option value="Front-end">Front-End</mat-option>
+        <mat-option value="Back-end">Back-End</mat-option>
       </mat-select>
       <mat-error *ngIf="form.controls.category.invalid">
         {{ getErrorMessage(form.controls.category) }}
