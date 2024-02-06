@@ -14,7 +14,8 @@ export const courseResolver: ResolveFn<Observable<Course>> = (route, state) => {
   return of<Course>({
     _id: '',
     name: '',
-    category: ''
+    category: '',
+    lessons: []
   });
 
 };
