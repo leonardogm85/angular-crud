@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../models/course';
+import { Lesson } from '../../models/lesson';
 
 @Component({
   selector: 'app-course-form',
@@ -14,17 +15,19 @@ import { Course } from '../../models/course';
 })
 export class CourseFormComponent implements OnInit {
 
-  form = this._formBuilder.group({
-    _id: [''],
-    name: ['', [
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(100)
-    ]],
-    category: ['', [
-      Validators.required
-    ]]
-  });
+  // form = this._formBuilder.group({
+  //   _id: [''],
+  //   name: ['', [
+  //     Validators.required,
+  //     Validators.minLength(5),
+  //     Validators.maxLength(100)
+  //   ]],
+  //   category: ['', [
+  //     Validators.required
+  //   ]]
+  // });
+
+  form!: FormGroup;
 
   constructor(
     private _formBuilder: NonNullableFormBuilder,
@@ -37,10 +40,45 @@ export class CourseFormComponent implements OnInit {
   ngOnInit(): void {
     const course: Course = this._activatedRoute.snapshot.data['course'];
 
-    this.form.setValue({
-      _id: course._id,
-      name: course.name,
-      category: course.category
+    // this.form.setValue({
+    //   _id: course._id,
+    //   name: course.name,
+    //   category: course.category
+    // });
+
+    this.form = this._formBuilder.group({
+      _id: [course._id],
+      name: [course.name, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(100)
+      ]],
+      category: [course.category, [
+        Validators.required
+      ]],
+      lessons: this._formBuilder.array(this.retrieveLessons(course))
+    });
+    console.log(this.form);
+    console.log(this.form.value);
+  }
+
+  private retrieveLessons(course: Course): FormGroup[] {
+    const lessons = [];
+
+    if (course?.lessons) {
+      course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
+    } else {
+      lessons.push(this.createLesson());
+    }
+
+    return lessons;
+  }
+
+  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }): FormGroup {
+    return this._formBuilder.group({
+      id: [lesson.id],
+      name: [lesson.name],
+      youtubeUrl: [lesson.youtubeUrl]
     });
   }
 

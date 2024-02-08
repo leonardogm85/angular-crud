@@ -10,10 +10,10 @@
       <mat-label>Name</mat-label>
       <input formControlName="name" matInput placeholder="Name">
       <mat-hint align="end">
-        {{ form.controls.name.value.length + ' / 100' }}
+        {{ (form.get('name')?.value.length ?? 0) + ' / 100' }}
       </mat-hint>
-      <mat-error *ngIf="form.controls.name.invalid">
-        {{ getErrorMessage(form.controls.name) }}
+      <mat-error *ngIf="form.get('name')?.invalid">
+        {{ getErrorMessage(form.get('name')!) }}
       </mat-error>
     </mat-form-field>
 
@@ -24,8 +24,8 @@
         <mat-option value="Front-end">Front-End</mat-option>
         <mat-option value="Back-end">Back-End</mat-option>
       </mat-select>
-      <mat-error *ngIf="form.controls.category.invalid">
-        {{ getErrorMessage(form.controls.category) }}
+      <mat-error *ngIf="form.get('category')?.invalid">
+        {{ getErrorMessage(form.get('category')!) }}
       </mat-error>
     </mat-form-field>
 
