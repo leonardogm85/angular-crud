@@ -30,27 +30,27 @@ body {
 }
 
 .p-4 {
-  padding: 1.5rem;
+  padding: 1.5rem !important;
 }
 
 .mt-4 {
-  margin-top: 1.5rem;
+  margin-top: 1.5rem !important;
 }
 
 .mb-4 {
-  margin-top: 1.5rem;
+  margin-bottom: 1.5rem !important;
+}
+
+.me-2 {
+  margin-right: 0.5rem !important;
+}
+
+.ms-2 {
+  margin-left: 0.5rem !important;
 }
 
 .w-100 {
   width: 100%;
-}
-
-.me-2 {
-  margin-right: 0.5rem;
-}
-
-.ms-2 {
-  margin-left: 0.5rem;
 }
 
 .spinner {

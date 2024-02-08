@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, NonNullableFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -62,7 +62,7 @@ export class CourseFormComponent implements OnInit {
     console.log(this.form.value);
   }
 
-  private retrieveLessons(course: Course): FormGroup[] {
+  private retrieveLessons(course: Course) {
     const lessons = [];
 
     if (course?.lessons) {
@@ -74,7 +74,7 @@ export class CourseFormComponent implements OnInit {
     return lessons;
   }
 
-  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }): FormGroup {
+  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
     return this._formBuilder.group({
       id: [lesson.id],
       name: [lesson.name],
@@ -120,6 +120,10 @@ export class CourseFormComponent implements OnInit {
     }
 
     return 'The value is invalid.';
+  }
+
+  getLessonsFormArray() {
+    return (<UntypedFormArray>this.form.get('lessons')).controls;
   }
 
 }

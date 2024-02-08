@@ -29,11 +29,37 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-toolbar class="mb-4">
+      <span>Lessons</span>
+      <button (click)="1" mat-icon-button color="accent" aria-label="Add lesson" class="ms-2">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <table class="w-100" cellspacing="0" formArrayName="lessons"
+      *ngFor="let lesson of getLessonsFormArray(); let i = index">
+      <tr [formGroupName]="i">
+        <td style="width: 65%;">
+          <mat-form-field class="w-100">
+            <mat-label>Name</mat-label>
+            <input formControlName="name" matInput placeholder="Name">
+          </mat-form-field>
+        </td>
+        <td style="width: 35%;">
+          <mat-form-field class="w-100">
+            <mat-label>URL</mat-label>
+            <span matPrefix>https://youtu.br/</span>
+            <input formControlName="youtubeUrl" matInput placeholder="URL">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+
   </form>
 
   <mat-card-actions align="end">
-    <button (click)="onSubmit()" mat-raised-button color="primary" class="me-2">Save</button>
-    <button (click)="onCancel()" mat-raised-button>Cancel</button>
+    <button (click)="onSubmit()" mat-raised-button color="primary" aria-label="Submit form" class="me-2">Save</button>
+    <button (click)="onCancel()" mat-raised-button aria-label="Cancel form">Cancel</button>
   </mat-card-actions>
 
 </mat-card>
