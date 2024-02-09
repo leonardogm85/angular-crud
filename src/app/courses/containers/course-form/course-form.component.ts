@@ -56,41 +56,25 @@ export class CourseFormComponent implements OnInit {
       category: [course.category, [
         Validators.required
       ]],
-      lessons: this._formBuilder.array(this.retrieveLessons(course))
+      lessons: this._formBuilder.array(this.retrieveLessons(course), Validators.required)
     });
     console.log(this.form);
     console.log(this.form.value);
   }
 
-  private retrieveLessons(course: Course) {
-    const lessons = [];
-
-    if (course?.lessons) {
-      course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
-    } else {
-      lessons.push(this.createLesson());
-    }
-
-    return lessons;
-  }
-
-  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
-    return this._formBuilder.group({
-      id: [lesson.id],
-      name: [lesson.name],
-      youtubeUrl: [lesson.youtubeUrl]
-    });
-  }
-
   onSubmit(): void {
-    this._coursesService.save(this.form.value).subscribe({
-      next: (value) => {
-        this.onSuccess();
-      },
-      error: (err) => {
-        this.onError();
-      },
-    });
+    if (this.form.valid) {
+      this._coursesService.save(this.form.value).subscribe({
+        next: (value) => {
+          this.onSuccess();
+        },
+        error: (err) => {
+          this.onError();
+        },
+      });
+    } else {
+      alert('The form is invalid.');
+    }
   }
 
   onCancel(): void {
@@ -122,8 +106,58 @@ export class CourseFormComponent implements OnInit {
     return 'The value is invalid.';
   }
 
+  private retrieveLessons(course: Course) {
+    const lessons = [];
+
+    if (course?.lessons) {
+      course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
+    } else {
+      lessons.push(this.createLesson());
+    }
+
+    return lessons;
+  }
+
+  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
+    return this._formBuilder.group({
+      id: [lesson.id],
+      name: [lesson.name, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(100)
+      ]],
+      youtubeUrl: [lesson.youtubeUrl, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(15)
+      ]]
+    });
+  }
+
   getLessonsFormArray() {
-    return (<UntypedFormArray>this.form.get('lessons')).controls;
+    return (<UntypedFormArray>this.form.get('lessons'));
+  }
+
+  getLessonFormControlByIndex(index: number, name: string) {
+    return this.getLessonsFormArray().at(index).get(name);
+  }
+
+  isFormArrayRequired(): boolean {
+    const lessons = this.getLessonsFormArray();
+
+    return !lessons.valid
+      &&
+      lessons.hasError('required')
+      &&
+      lessons.touched;
+  }
+
+  addLesson(): void {
+    this.getLessonsFormArray().push(this.createLesson());
+  }
+
+  deleteLesson(index: number): void {
+    this.getLessonsFormArray().removeAt(index);
   }
 
 }
