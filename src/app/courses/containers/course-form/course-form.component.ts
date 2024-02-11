@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup, NonNullableFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../models/course';
 import { Lesson } from '../../models/lesson';
+import { FormUtilsService } from 'src/app/shared/form/form-utils.service';
 
 @Component({
   selector: 'app-course-form',
@@ -34,7 +35,8 @@ export class CourseFormComponent implements OnInit {
     private _coursesService: CoursesService,
     private _snackBar: MatSnackBar,
     private _location: Location,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    public formService: FormUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -58,8 +60,6 @@ export class CourseFormComponent implements OnInit {
       ]],
       lessons: this._formBuilder.array(this.retrieveLessons(course), Validators.required)
     });
-    console.log(this.form);
-    console.log(this.form.value);
   }
 
   onSubmit(): void {
@@ -73,7 +73,7 @@ export class CourseFormComponent implements OnInit {
         },
       });
     } else {
-      alert('The form is invalid.');
+      this.formService.validateFormGroup(this.form);
     }
   }
 
@@ -90,24 +90,8 @@ export class CourseFormComponent implements OnInit {
     this._snackBar.open('Error while saving course.', 'Close', { duration: 5000 });
   }
 
-  getErrorMessage<TType>(control: AbstractControl<TType>): string {
-    if (control.hasError('required')) {
-      return 'The value must be provided.';
-    }
-
-    if (control.hasError('minlength')) {
-      return `The value must be a minimum of ${control.getError('minlength')['requiredLength']} characters.`;
-    }
-
-    if (control.hasError('maxlength')) {
-      return `The value must be a maximum of ${control.getError('maxlength')['requiredLength']} characters.`;
-    }
-
-    return 'The value is invalid.';
-  }
-
-  private retrieveLessons(course: Course) {
-    const lessons = [];
+  private retrieveLessons(course: Course): UntypedFormGroup[] {
+    const lessons: UntypedFormGroup[] = [];
 
     if (course?.lessons) {
       course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
@@ -118,7 +102,7 @@ export class CourseFormComponent implements OnInit {
     return lessons;
   }
 
-  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
+  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }): UntypedFormGroup {
     return this._formBuilder.group({
       id: [lesson.id],
       name: [lesson.name, [
@@ -134,30 +118,24 @@ export class CourseFormComponent implements OnInit {
     });
   }
 
-  getLessonsFormArray() {
-    return (<UntypedFormArray>this.form.get('lessons'));
+  getLessons(): UntypedFormArray {
+    return this.formService.getFormArrayByGroup(this.form, 'lessons');
   }
 
-  getLessonFormControlByIndex(index: number, name: string) {
-    return this.getLessonsFormArray().at(index).get(name);
+  getControlOfLesson(index: number, name: string): UntypedFormControl {
+    return this.formService.getFormControlByArray(this.getLessons(), index, name);
   }
 
-  isFormArrayRequired(): boolean {
-    const lessons = this.getLessonsFormArray();
-
-    return !lessons.valid
-      &&
-      lessons.hasError('required')
-      &&
-      lessons.touched;
+  getControlOfCourse(name: string): UntypedFormControl {
+    return this.formService.getFormControlByGroup(this.form, name);
   }
 
   addLesson(): void {
-    this.getLessonsFormArray().push(this.createLesson());
+    this.getLessons().push(this.createLesson());
   }
 
   deleteLesson(index: number): void {
-    this.getLessonsFormArray().removeAt(index);
+    this.getLessons().removeAt(index);
   }
 
 }

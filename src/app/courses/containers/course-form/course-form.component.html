@@ -10,10 +10,10 @@
       <mat-label>Name</mat-label>
       <input formControlName="name" matInput placeholder="Name">
       <mat-hint align="end">
-        {{ (form.get('name')?.value.length ?? 0) + ' / 100' }}
+        {{ (getControlOfCourse('name').value.length ?? 0) + ' / 100' }}
       </mat-hint>
-      <mat-error *ngIf="form.get('name')?.invalid">
-        {{ getErrorMessage(form.get('name')!) }}
+      <mat-error *ngIf="getControlOfCourse('name').invalid">
+        {{ formService.getFormControlErrorMessage(getControlOfCourse('name')) }}
       </mat-error>
     </mat-form-field>
 
@@ -21,11 +21,11 @@
       <mat-label>Category</mat-label>
       <mat-select formControlName="category">
         <mat-option>None</mat-option>
-        <mat-option value="Front-end">Front-End</mat-option>
-        <mat-option value="Back-end">Back-End</mat-option>
+        <mat-option value="frontend">Front-End</mat-option>
+        <mat-option value="backend">Back-End</mat-option>
       </mat-select>
-      <mat-error *ngIf="form.get('category')?.invalid">
-        {{ getErrorMessage(form.get('category')!) }}
+      <mat-error *ngIf="getControlOfCourse('category').invalid">
+        {{ formService.getFormControlErrorMessage(getControlOfCourse('category')) }}
       </mat-error>
     </mat-form-field>
 
@@ -36,20 +36,20 @@
           <mat-icon>add</mat-icon>
         </button>
       </mat-toolbar>
-      <mat-error *ngIf="isFormArrayRequired()">
+      <mat-error *ngIf="formService.isFormArrayRequired(getLessons())">
         Add at least one lesson.
       </mat-error>
     </div>
 
     <table class="w-100" cellspacing="0" formArrayName="lessons"
-      *ngFor="let lesson of getLessonsFormArray().controls; let i = index">
+      *ngFor="let lesson of getLessons().controls; let i = index">
       <tr [formGroupName]="i">
         <td class="w-60">
           <mat-form-field class="w-100">
             <mat-label>Name</mat-label>
             <input formControlName="name" matInput placeholder="Name">
-            <mat-error *ngIf="getLessonFormControlByIndex(i, 'name')?.invalid">
-              The field is invalid.
+            <mat-error *ngIf="getControlOfLesson(i, 'name')?.invalid">
+              {{ formService.getFormControlErrorMessage(getControlOfLesson(i, 'name')) }}
             </mat-error>
           </mat-form-field>
         </td>
@@ -58,8 +58,8 @@
             <mat-label>URL</mat-label>
             <span matPrefix>https://youtu.br/</span>
             <input formControlName="youtubeUrl" matInput placeholder="URL">
-            <mat-error *ngIf="getLessonFormControlByIndex(i, 'youtubeUrl')?.invalid">
-              The field is invalid.
+            <mat-error *ngIf="getControlOfLesson(i, 'youtubeUrl').invalid">
+              {{ formService.getFormControlErrorMessage(getControlOfLesson(i, 'youtubeUrl')) }}
             </mat-error>
           </mat-form-field>
         </td>
