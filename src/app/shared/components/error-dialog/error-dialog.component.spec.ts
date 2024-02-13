@@ -8,8 +8,8 @@ describe('ErrorDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ErrorDialogComponent]
-    });
+    imports: [ErrorDialogComponent]
+});
     fixture = TestBed.createComponent(ErrorDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

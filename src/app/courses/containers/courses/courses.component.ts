@@ -10,11 +10,18 @@ import { CoursesService } from '../../services/courses.service';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { Page } from '../../models/page';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatCard } from '@angular/material/card';
 
 @Component({
-  selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss']
+    selector: 'app-courses',
+    templateUrl: './courses.component.html',
+    styleUrls: ['./courses.component.scss'],
+    standalone: true,
+    imports: [MatCard, MatToolbar, NgIf, CoursesListComponent, MatPaginator, MatProgressSpinner, AsyncPipe]
 })
 export class CoursesComponent {
 
