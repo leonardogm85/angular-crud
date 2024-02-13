@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, first } from 'rxjs';
 
 import { Course } from '../models/course';
+import { Page } from '../models/page';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class CoursesService {
     private _httpClient: HttpClient
   ) { }
 
-  list(): Observable<Course[]> {
-    return this._httpClient.get<Course[]>(this._api).pipe(
+  list(pageNumber: number = 0, pageSize: number = 10): Observable<Page<Course>> {
+    return this._httpClient.get<Page<Course>>(this._api, { params: { pageNumber, pageSize } }).pipe(
       first()
     );
   }

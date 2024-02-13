@@ -5,8 +5,15 @@
   </mat-toolbar>
 
   <div class="mat-elevation-z8">
-    <app-courses-list *ngIf="courses$ | async as courses; else loading" [courses]="courses" (add)="onAdd()"
-      (edit)="onEdit($event)" (delete)="onDelete($event)"></app-courses-list>
+    <div *ngIf="courses$ | async as courses; else loading">
+      <app-courses-list [courses]="courses.records" (add)="onAdd()" (edit)="onEdit($event)"
+        (delete)="onDelete($event)"></app-courses-list>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageIndex]="pageIndex" [pageSize]="pageSize"
+        [length]="courses.totalElements" (page)="refresh($event)" showFirstLastButtons
+        aria-label="Select page of courses">
+      </mat-paginator>
+    </div>
 
     <ng-template #loading>
       <div class="p-4 spinner">
